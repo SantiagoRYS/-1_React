@@ -5,21 +5,23 @@ import {
   } from "@mui/material";
 
 const Home = () => {
-    const [cursos, setCursos] = useState([]);
-    const [selectedCurso, setSelectedCurso] = useState(null);
-    const [openModal, setOpenModal] = useState(false);
-    const [formValues, setFormValues] = useState({
+    const [cursos, setCursos] = useState([]); //Almacena los cursos que se obtienen desde la API.
+    const [selectedCurso, setSelectedCurso] = useState(null); // Almacena el curso que el usuario selecciona para mostrar en el modal.
+    const [openModal, setOpenModal] = useState(false); // Controla si el modal de registro e inscripción está abierto o cerrado.
+    const [formValues, setFormValues] = useState({ // Almacena los valores de los campos del formulario en el modal.
       nombre: "",
       email: "",
       password: "",
     });
-const [openSnackbar, setOpenSnackbar] = useState(false);
-const [errorMessage, setErrorMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Controla si el Snackbar (mensaje emergente) está visible o no.
+  const [errorMessage, setErrorMessage] = useState(""); //Almacena el mensaje de error o éxito que se muestra en el Snackbar.
 
-useEffect(() => {
+  // Cuando el componente se monta llama la funcion fetchCursos 
+  useEffect(() => {
     fetchCursos();
   }, []);
 
+  // Con esta funcion optenemos la lista de los cursos con la API
   const fetchCursos = async () => {
     try {
       const response = await fetch("https://localhost:3000/api/cursos");
@@ -37,13 +39,13 @@ useEffect(() => {
     e.target.src = "https://via.placeholder.com/150"; // Imagen por defecto
   };
 
-  // Función para manejar el clic en una tarjeta de curso
+  // Función para manejar el clic en una tarjeta de curso y el modeal
   const handleCardClick = (curso) => {
     setSelectedCurso(curso);
     setOpenModal(true);
   };
 
-  // Función para cerrar el modal
+  // Función para cerrar y reiniciar   el modal
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedCurso(null);
