@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-    Container, Grid, Card, CardContent, CardMedia, Typography, Button, Dialog,
+    Container, Grid2, Card, CardContent, CardMedia, Typography, Button, Dialog,
     DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Alert,
   } from "@mui/material";
 
@@ -11,7 +11,7 @@ const Home = () => {
     const [formValues, setFormValues] = useState({ // Almacena los valores de los campos del formulario en el modal.
       nombre: "",
       email: "",
-      password: "",
+      password: ""
     });
   const [openSnackbar, setOpenSnackbar] = useState(false); // Controla si el Snackbar (mensaje emergente) está visible o no.
   const [errorMessage, setErrorMessage] = useState(""); //Almacena el mensaje de error o éxito que se muestra en el Snackbar.
@@ -52,7 +52,7 @@ const Home = () => {
     setFormValues({
       nombre: "",
       email: "",
-      password: "",
+      password: ""
     });
   };
 
@@ -75,10 +75,9 @@ const Home = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formValues),
-        }
-      );
+        });
 
-      if (createUserResponse.status !== 200 && !createUserResponse.ok) {
+      if (createUserResponse.status !== 409 && !createUserResponse.ok) {
         const errorData = await createUserResponse.json();
         throw new Error(errorData.error || "Error al registrar usuario");
       }
@@ -88,15 +87,14 @@ const Home = () => {
 
       // Inscribir al usuario en el curso
       const enrollResponse = await fetch(
-        `https://localhost:3000/api/usuarios/${email}/cursos`,
-        {
+        `https://localhost:3000/api/usuarios/${email}/cursos`,{
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ cursos: [selectedCurso._id] }),
-        }
-      );
+          body: JSON.stringify({ cursos: [selectedCurso._id] 
+          }),
+        });
 
       if (!enrollResponse.ok) {
         const errorData = await enrollResponse.json();
@@ -123,9 +121,9 @@ const Home = () => {
       <Typography variant="h4" gutterBottom>
         Cursos Disponibles
       </Typography>
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {cursos.map((curso) => (
-          <Grid item xs={12} sm={6} md={4} key={curso._id}>
+          <Grid2 item xs={12} sm={6} md={4} key={curso._id}>
             <Card onClick={() => handleCardClick(curso)}>
               <CardMedia
                 component="img"
@@ -149,16 +147,16 @@ const Home = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
+
       {/* Modal de regustro e inscripcion */}
       <Dialog
         open={openModal}
         onClose={handleCloseModal}
         maxWidth="sm"
-        fullWidth
-      >
+        fullWidth>
         <DialogTitle>Registro e Inscripcion</DialogTitle>
         <DialogContent>
           <Typography variant="h6">{selectedCurso?.titulo}</Typography>
@@ -190,7 +188,7 @@ const Home = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button onClick={handleCloseModal} color="default">
             Cancelar
           </Button>
           <Button onClick={handleRegisterAndEnroll} color="primary">
@@ -203,8 +201,7 @@ const Home = () => {
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
+        onClose={handleCloseSnackbar}>
         <Alert
           onClose={handleCloseSnackbar}
           severity={errorMessage.includes("exito") ? "succes" : "error"}
